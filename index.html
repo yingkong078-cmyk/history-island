@@ -921,6 +921,8 @@ body[data-subject="dao"] .nav-ico { color: #2F6C60; }
 .search-result b { font-size: 12.5px; display: block; }
 .search-result span { font-size: 11px; color: var(--muted); }
 .search-empty { padding: 30px; text-align: center; color: var(--muted); font-size: 12.5px; }
+.search-web-row { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); text-align: right; }
+.search-web-row .btn { font-size: 11px; }
 
 /* ---------- Toast ---------- */
 .toast-wrap { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); z-index: 300; display: grid; gap: 8px; width: min(94vw, 460px); pointer-events: none; }
@@ -1176,6 +1178,24 @@ body[data-subject="dao"] .hero h1 .highlight::after { background: rgba(47, 108, 
 .ds-result b { display: block; margin-bottom: 3px; font-size: 12.5px; }
 .ds-result p { margin: 0 0 6px; }
 .ds-principle { font-size: 11px; opacity: .85; }
+.point-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.point-chip { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 11px 13px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); text-align: left; font-size: 12.5px; color: var(--ink-soft); }
+.point-chip:hover { border-color: var(--teal); background: var(--teal-soft); }
+.point-chip small { color: var(--muted); font-size: 10px; white-space: nowrap; }
+.read-coach { margin: 14px 0 16px; padding: 12px 14px; border-radius: 12px; background: linear-gradient(135deg, rgba(47,108,96,.07), rgba(180,136,51,.06)); border: 1px dashed rgba(47,108,96,.3); }
+.read-coach-head { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.read-coach-head b { font-size: 12px; color: #24544A; }
+.read-eye { padding: 2px 7px; border-radius: 99px; background: #FFFDF8; border: 1px solid rgba(47,108,96,.2); font-size: 10px; color: var(--teal); }
+.read-speak { margin-left: auto; padding: 4px 9px; border-radius: 8px; border: 1px solid rgba(47,108,96,.28); background: #FFFDF8; font-size: 10.5px; color: var(--teal); }
+.read-speak:hover { background: var(--teal-soft); }
+.read-steps { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 3px; font-size: 11.5px; line-height: 1.65; color: var(--ink-soft); }
+.read-review { margin-top: 9px; padding: 9px 11px; border-radius: 9px; background: var(--paper-deep); font-size: 11.5px; line-height: 1.7; color: var(--ink-soft); }
+.read-review b { color: var(--ink); }
+@media (max-width: 600px) {
+  .point-picker { grid-template-columns: 1fr; }
+  .read-coach { padding: 10px 11px; }
+  .read-steps { font-size: 11px; }
+}
 .dao-guide-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 20px; }
 .dao-guide-card { display: block; padding: 18px; border-radius: 15px; background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow-sm); transition: .16s; }
 .dao-guide-card:hover { transform: translateY(-2px); border-color: var(--line-strong); }
@@ -1187,7 +1207,66 @@ body[data-subject="dao"] .hero h1 .highlight::after { background: rgba(47, 108, 
   .dao-case { padding: 11px 12px; }
 }
 
-@media print {
+/* ---------- 学习助手 · 小光 ---------- */
+.assistant-fab { position: fixed; right: 22px; bottom: 22px; z-index: 140; width: 64px; height: 64px; border-radius: 50%; background: #E4F1EC; border: 1.5px solid rgba(47,108,96,.35); box-shadow: 0 10px 28px rgba(35,70,60,.22); display: grid; place-items: center; transition: transform .18s; }
+.assistant-fab:hover { transform: translateY(-3px) scale(1.03); }
+.assistant-fab-robot { width: 54px; height: 54px; display: block; }
+.assistant-pulse { position: absolute; right: 5px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 0 rgba(180,136,51,.4); animation: assistantPulse 2.4s infinite; }
+@keyframes assistantPulse { 0% { box-shadow: 0 0 0 0 rgba(180,136,51,.42); } 70% { box-shadow: 0 0 0 8px rgba(180,136,51,0); } 100% { box-shadow: 0 0 0 0 rgba(180,136,51,0); } }
+.assistant-hint { position: fixed; right: 96px; bottom: 34px; z-index: 139; max-width: 230px; padding: 8px 11px; border-radius: 10px 10px 2px 10px; background: var(--ink); color: var(--paper); font-size: 11px; line-height: 1.55; opacity: 0; transform: translateY(4px); pointer-events: none; transition: .3s; cursor: pointer; }
+.assistant-hint.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.assistant-panel { position: fixed; right: 22px; bottom: 96px; z-index: 138; width: min(380px, calc(100vw - 28px)); max-height: min(680px, calc(100vh - 120px)); display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 22px 60px rgba(45,35,20,.24); overflow: hidden; opacity: 0; transform: translateY(12px) scale(.98); pointer-events: none; transition: .18s; }
+.assistant-panel.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.assistant-head { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: linear-gradient(135deg, #E4F1EC, #F7F1E6); border-bottom: 1px solid var(--line); }
+.assistant-avatar { width: 38px; height: 38px; flex: 0 0 auto; }
+.assistant-title { flex: 1; min-width: 0; line-height: 1.25; }
+.assistant-title b { display: block; font-family: var(--serif); font-size: 16px; }
+.assistant-title small { display: block; font-size: 9.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.assistant-head-actions { display: flex; gap: 2px; }
+.assistant-icon-btn { width: 30px; height: 30px; border-radius: 8px; font-size: 14px; color: var(--ink-soft); }
+.assistant-icon-btn:hover { background: rgba(47,108,96,.1); color: var(--teal); }
+.assistant-body { flex: 1 1 auto; min-height: 100px; max-height: 380px; overflow-y: auto; padding: 12px 14px; display: flex; flex-direction: column; gap: 9px; background: #FFFDF8; }
+.assistant-msg { max-width: 92%; padding: 9px 12px; border-radius: 12px; font-size: 12.5px; line-height: 1.7; word-break: break-word; }
+.assistant-msg.bot { align-self: flex-start; background: var(--paper-deep); color: var(--ink-soft); border-bottom-left-radius: 3px; }
+.assistant-msg.user { align-self: flex-end; background: #2F6C60; color: #F7F1E6; border-bottom-right-radius: 3px; }
+.assistant-msg.bot.break { background: var(--gold-soft); color: #5C4210; }
+.assistant-soft { color: var(--muted); font-size: 11px; }
+.assistant-steps { margin: 5px 0 4px; padding-left: 17px; display: grid; gap: 3px; }
+.assistant-link { color: var(--red-deep); text-decoration: underline; font-size: 11.5px; }
+.assistant-break-actions { display: flex; gap: 7px; margin-top: 8px; flex-wrap: wrap; }
+.assistant-break-actions button { padding: 5px 9px; border-radius: 8px; border: 1px solid rgba(120,90,20,.25); background: #FFFDF8; font-size: 11px; color: #5C4210; }
+.assistant-break-actions button:hover { background: #FFF4D8; }
+.assistant-quick { display: flex; gap: 5px; padding: 8px 12px 0; flex-wrap: wrap; background: #FFFDF8; }
+.assistant-quick button { padding: 4px 9px; border-radius: 99px; border: 1px solid var(--line); background: var(--card); font-size: 10.5px; color: var(--ink-soft); }
+.assistant-quick button:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-soft); }
+.assistant-input-row { display: flex; gap: 6px; padding: 9px 12px; background: #FFFDF8; border-top: 1px solid var(--line); }
+.assistant-input-row input { flex: 1; min-width: 0; height: 38px; padding: 0 10px; border: 1px solid var(--line-strong); border-radius: 9px; background: var(--paper); font-size: 12px; }
+.assistant-input-row input:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(47,108,96,.1); }
+.assistant-send { width: 40px; height: 38px; border-radius: 9px; background: #2F6C60; color: #FFF; font-size: 15px; }
+.assistant-send:hover { background: #24544A; }
+.assistant-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 12px 9px; background: #FFFDF8; border-top: 1px dashed var(--line); font-size: 10px; color: var(--muted); }
+.assistant-break-link { font-size: 10px; color: var(--teal); text-decoration: underline; }
+.assistant-typing { display: flex; gap: 3px; padding: 10px 12px; }
+.assistant-typing i { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); animation: assistantBlink 1s infinite; }
+.assistant-typing i:nth-child(2) { animation-delay: .15s; }
+.assistant-typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes assistantBlink { 0%, 60%, 100% { opacity: .3; } 30% { opacity: 1; } }
+.assistant-settings-form { display: grid; gap: 10px; }
+.assistant-setting-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px dashed var(--line); font-size: 12px; }
+.assistant-setting-row span b { display: block; }
+.assistant-setting-row span small { display: block; color: var(--muted); font-size: 10px; margin-top: 2px; }
+.assistant-setting-row select { height: 32px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--paper); font-size: 12px; }
+.assistant-setting-sep { height: 1px; background: var(--line); margin: 2px 0; }
+.assistant-setting-field { display: block; font-size: 10px; font-weight: 700; letter-spacing: .05em; color: var(--muted); }
+.assistant-setting-field input { width: 100%; margin-top: 5px; height: 36px; padding: 0 9px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--paper); font-size: 12px; }
+@media (max-width: 600px) {
+  .assistant-fab { right: 14px; bottom: 14px; width: 58px; height: 58px; }
+  .assistant-fab-robot { width: 49px; height: 49px; }
+  .assistant-panel { left: 12px; right: 12px; bottom: 82px; width: auto; max-height: calc(100vh - 100px); }
+  .assistant-hint { right: 82px; bottom: 24px; }
+  .assistant-body { max-height: 42vh; }
+}
+@media print { .assistant-fab, .assistant-panel, .assistant-hint { display: none !important; } }
   .topbar, .site-footer, .toast-wrap, #confettiCanvas, #modalRoot, .btn, .btn-row, .section-link, .page-atmosphere { display: none !important; }
   body { background: #fff; }
   .page-wrap { max-width: 100%; padding: 0; }
@@ -1287,6 +1366,7 @@ body[data-subject="dao"] .hero h1 .highlight::after { background: rgba(47, 108, 
 </footer>
 
 <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+<div id="assistantRoot"></div>
 <canvas id="confettiCanvas" aria-hidden="true"></canvas>
 <div id="modalRoot"></div>
 <div class="sr-only" id="liveRegion" aria-live="polite"></div>
@@ -4252,24 +4332,29 @@ function buildSearchIndex() {
   });
   TOPICS.forEach(t => SEARCH_INDEX.push({ kind: '专题', title: t.title, sub: t.desc, href: `#topic/${t.id}`, keys: t.title + t.desc + t.intro }));
   TIMELINE.forEach(e => SEARCH_INDEX.push({ kind: '年表', title: e.t, sub: e.text, href: '#guide', keys: e.text }));
+  QUESTIONS.forEach(q => SEARCH_INDEX.push({ kind: '题目', title: q.stem.slice(0, 40), sub: `${q.point} · ${q.type === 'choice' ? '选择' : q.type === 'fill' ? '填空' : q.type === 'order' ? '排序' : '配对'}`, href: `#unit/${q.unit}/quiz`, keys: `${q.stem}${q.point}${q.explain}` }));
+  if (typeof DAO_GUIDE !== 'undefined') DAO_GUIDE.forEach(g => SEARCH_INDEX.push({ kind: '道法速查', title: g.title, sub: g.text, href: `#unit/${g.unit}/knowledge`, keys: g.title + g.text }));
+  if (typeof DAO_SCENARIOS !== 'undefined') DAO_SCENARIOS.forEach(s => SEARCH_INDEX.push({ kind: '情境实验', title: s.title, sub: s.question, href: '#lab', keys: s.title + s.scene + s.principle }));
 }
-function openSearch() {
+function openSearch(initial = '') {
   buildSearchIndex();
   openModal({
     title: '搜索全站',
-    body: `<div class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="输入关键词：鸦片战争、孙中山、辛丑条约…" autocomplete="off" aria-label="搜索关键词"></div>
-      <div class="search-results" id="searchResults"><div class="search-empty">输入关键词，查找单元、课时、名词、专题和大事年表。</div></div>`,
+    body: `<div class="search-box"><span>⌕</span><input id="searchInput" type="search" value="${esc(initial)}" placeholder="输入关键词：鸦片战争、友谊、法律年龄、孙中山…" autocomplete="off" aria-label="搜索关键词"></div>
+      <div class="search-results" id="searchResults"><div class="search-empty">输入关键词，查找单元、课时、名词、题目、专题、道法速查和大事年表。</div></div>
+      <div class="search-web-row"><button type="button" class="btn btn-sm btn-ghost" id="searchWebBtn">站内没有？用 Bing 联网搜索</button></div>`,
     actions: [{ text: '关闭' }]
   });
   $('#modalRoot .modal').classList.add('search-modal');
   const input = $('#searchInput');
   input.focus();
+  input.select();
   const render = () => {
     const kw = input.value.trim().toLowerCase();
     const box = $('#searchResults');
-    if (!kw) { box.innerHTML = '<div class="search-empty">输入关键词，查找单元、课时、名词、专题和大事年表。</div>'; return; }
+    if (!kw) { box.innerHTML = '<div class="search-empty">输入关键词，查找单元、课时、名词、题目、专题、道法速查和大事年表。</div>'; return; }
     const hits = SEARCH_INDEX.filter(item => (item.title + item.sub + item.keys).toLowerCase().includes(kw)).slice(0, 24);
-    if (!hits.length) { box.innerHTML = '<div class="search-empty">没有找到相关内容，换个词试试。</div>'; return; }
+    if (!hits.length) { box.innerHTML = '<div class="search-empty">没有找到相关内容，换个词试试。也可以去问右下角的小光。</div>'; return; }
     box.innerHTML = hits.map(h => `<a class="search-result" href="${h.href}"><span class="sr-kind">${h.kind}</span><span><b>${esc(h.title)}</b><span>${esc(h.sub).slice(0, 60)}</span></span></a>`).join('');
     $$('.search-result', box).forEach(a => a.addEventListener('click', () => closeModal()));
   };
@@ -4277,6 +4362,11 @@ function openSearch() {
   input.addEventListener('keydown', e => {
     if (e.key === 'Enter') { const first = $('.search-result'); if (first) { location.hash = first.getAttribute('href'); closeModal(); } }
   });
+  $('#searchWebBtn')?.addEventListener('click', () => {
+    const q = input.value.trim() || '初中历史 道德与法治';
+    window.open('https://www.bing.com/search?q=' + encodeURIComponent(q), '_blank', 'noopener');
+  });
+  if (initial) render();
 }
 
 /* ---------- SVG 工具 ---------- */
@@ -4321,7 +4411,7 @@ function route() {
     guide: () => currentSubject() === 'dao' ? renderDaoGuide() : renderGuide(a),
     topic: () => { if (topicById(a)) state.subject = 'history'; renderTopic(a); },
     sync: () => renderSync(a),
-    search: () => { renderHome(); openSearch(); }
+    search: () => { currentSubject() === 'dao' ? renderDaoHome() : renderHome(); openSearch(); }
   };
   const fn = pages[page] || pages.home;
   if (page !== currentPage) window.scrollTo({ top: 0, behavior: 'auto' });
@@ -4335,6 +4425,7 @@ function navigate(hash) {
   if (location.hash === hash) route();
   else location.hash = hash;
 }
+
 
 
 
@@ -5515,7 +5606,19 @@ function startQuiz(opts) {
   else if (opts.mode === 'wrong') qids = state.wrong.filter(w => w.status !== 'mastered').map(w => w.qid).filter(id => qById(id) && subjectOfUnit(qById(id).unit) === sid);
   else if (opts.mode === 'seq') qids = shuffle(pool.filter(q => q.type === 'order' || q.type === 'match').map(q => q.id)).slice(0, opts.count || 8);
   else if (opts.mode === 'source') qids = shuffle((sid === 'dao' ? pool.filter(q => q.type === 'choice') : pool.filter(q => q.source)).map(q => q.id)).slice(0, opts.count || 6);
-  else if (opts.mode === 'daily') {
+  else if (opts.mode === 'graded') {
+    const easy = pool.filter(q => q.level === 1);
+    const hard = pool.filter(q => q.level !== 1);
+    qids = [...easy.slice(0, 6), ...hard.slice(0, 4)].map(q => q.id);
+    if (qids.length < (opts.count || 10)) qids = qids.concat(pool.filter(q => !qids.includes(q.id)).slice(0, (opts.count || 10) - qids.length).map(q => q.id));
+  } else if (opts.mode === 'mother') {
+    qids = shuffle(pool.filter(isMotherQuestion)).slice(0, opts.count || 8).map(q => q.id);
+  } else if (opts.mode === 'point') {
+    const exact = pool.filter(q => q.point === opts.point);
+    const units = new Set(exact.map(q => q.unit));
+    const related = pool.filter(q => units.has(q.unit) && q.point !== opts.point);
+    qids = [...exact, ...related].sort((a, b) => (a.level || 1) - (b.level || 1)).slice(0, opts.count || 8).map(q => q.id);
+  } else if (opts.mode === 'daily') {
     const done = new Set(state.wrong.map(w => w.qid));
     qids = shuffle(pool.filter(q => q.type === 'choice' && !done.has(q.id)).map(q => q.id)).slice(0, 5);
     if (qids.length < 5) qids = qids.concat(shuffle(pool.filter(q => q.type === 'choice').map(q => q.id)).slice(0, 5 - qids.length));
@@ -5542,6 +5645,23 @@ function startQuiz(opts) {
   playSound('click');
   if (location.hash === '#practice') renderPractice();
   else location.hash = '#practice';
+}
+
+function openPointPicker() {
+  const qs = unitQuestions(practiceUnit);
+  const points = [...new Set(qs.map(q => q.point).filter(Boolean))];
+  if (!points.length) { toast('这一单元还没有可用知识点。', '🎯'); return; }
+  openModal({
+    title: '选一个知识点专练',
+    body: `<p class="small muted" style="margin:0 0 12px">同一个考点，换不同问法；不足 8 题时自动补同单元题，练到真正会迁移。</p>
+      <div class="point-picker">${points.map(p => `<button class="point-chip" data-point-pick="${esc(p)}">${esc(p)}<small>${qs.filter(q => q.point === p).length} 题 + 同单元</small></button>`).join('')}</div>`,
+    actions: [{ text: '关闭' }]
+  });
+  $$('[data-point-pick]').forEach(btn => btn.addEventListener('click', () => {
+    const point = btn.dataset.pointPick;
+    closeModal();
+    startQuiz({ mode: 'point', point, count: 8, title: `知识点 · ${point}` });
+  }));
 }
 
 function renderPractice() {
@@ -5596,6 +5716,15 @@ function renderPractice() {
           </button>
           <button class="mode-card" data-mode="seq" style="--accent:#4F7A46">
             <span class="m-ico">⏳</span><b>${isDao ? '排序与配对' : '时序专题'}</b><span>${isDao ? '排步骤、连概念，专治“知道但说不清”。' : '排序和配对，专治时间线混乱。'}</span><small>8 题 · 能力训练</small>
+          </button>
+          <button class="mode-card" data-mode="mother" style="--accent:#7A4A6A">
+            <span class="m-ico">🧩</span><b>母题精练</b><span>每课挑一道最核心的选择题，先把“母题”吃透。</span><small>8 题 · 覆盖重点课</small>
+          </button>
+          <button class="mode-card" data-mode="graded" style="--accent:#B4683F">
+            <span class="m-ico">🪜</span><b>由易到难</b><span>先基础后提升，按难度阶梯循序练习。</span><small>10 题 · 循序渐进</small>
+          </button>
+          <button class="mode-card" data-mode="point" style="--accent:#3F7A6A">
+            <span class="m-ico">🎯</span><b>知识点专练</b><span>选一个考点，集中练同一知识点的不同问法。</span><small>同一考点 + 同单元</small>
           </button>
         </div>
 
@@ -5653,6 +5782,9 @@ function renderPractice() {
     if (mode === 'wrong') startQuiz({ mode: 'wrong', title: '错题重练' });
     if (mode === 'source') startQuiz({ mode: 'source', count: 6, title: isDao ? '情境判断专项' : '史料研读专项' });
     if (mode === 'seq') startQuiz({ mode: 'seq', count: 8, title: isDao ? '排序与配对训练' : '时序专题训练' });
+    if (mode === 'mother') startQuiz({ mode: 'mother', count: 8, title: '母题精练' });
+    if (mode === 'graded') startQuiz({ mode: 'graded', count: 10, title: '由易到难 · 阶梯练习' });
+    if (mode === 'point') openPointPicker();
     if (mode === 'unit') {
       const el = $('#startUnitQuiz');
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -5690,9 +5822,53 @@ function prepareQuestion(q) {
     quiz.matchDone = [];
   }
 }
+function isMotherQuestion(q) {
+  return q && q.level === 1 && q.type === 'choice' && /-1$/.test(String(q.id));
+}
+
+function questionReading(q) {
+  const isDao = subjectOfUnit(q.unit) === 'dao';
+  const stem = String(q.stem || '');
+  const eyes = [];
+  if (/不包括|不正确|错误|不符合/.test(stem)) eyes.push('反向选择');
+  if (/根本|直接|最主要|实质|标志|首先/.test(stem)) eyes.push('限定词');
+  if (/地位|性质|作用|影响|意义|特点/.test(stem)) eyes.push('结论/地位');
+  if (/原因|目的/.test(stem)) eyes.push('因果');
+  if (/时间|年代|先后|顺序/.test(stem)) eyes.push('时间线');
+  if (/材料|这说明|反映了|表明|可知/.test(stem)) eyes.push('材料信息');
+  if (isDao && /应该|做法|正确|最合适|你会/.test(stem)) eyes.push('行为选择');
+  if (!eyes.length) eyes.push(isDao ? '情境冲突' : '题干核心');
+  let steps;
+  if (q.type === 'fill') {
+    steps = ['看空格前后的关键词，确定要填的是人物、事件、制度还是概念。', '回忆这一课的知识卡，填最准确的教材用语。', '写完后把整句话读一遍，检查通顺、年代和主体是否对得上。'];
+  } else if (q.type === 'order') {
+    steps = ['先找最早和最晚的两项，确定首尾。', '再用时间词、因果关系或先后逻辑校验中间项。', '排完后按顺序读一遍，看是否出现“先果后因”。'];
+  } else if (q.type === 'match') {
+    steps = ['先连最有把握的一组，缩小范围。', '剩下的用排除法，注意左右栏必须一一对应。', '全部连完后逐组回读，防止“张冠李戴”。'];
+  } else {
+    steps = isDao
+      ? ['先圈出情境中的角色、冲突和限定词（正确/错误/最合适）。', '想清楚这件事影响到谁，教材强调的价值、规则或法律是什么。', '逐个排除“看起来合理但越界/推卸责任/伤害他人”的选项。']
+      : ['先圈出时间、人物、地点和限定词（根本/直接/不包括）。', '判断它考的是哪一课、哪一种历史结论。', '再逐个排除“偷换时间、人物、因果或程度”的选项。'];
+  }
+  return { eyes, steps, isDao, type: q.type };
+}
+
+function readingTipHTML(q) {
+  const r = questionReading(q);
+  return `<section class="read-coach" aria-label="审题提示">
+    <div class="read-coach-head">
+      <b>🔎 先审题，再作答</b>
+      ${r.eyes.map(e => `<span class="read-eye">${e}</span>`).join('')}
+      <button class="read-speak" type="button" data-read-speak>🔊 读题</button>
+    </div>
+    <ol class="read-steps">${r.steps.map(s => `<li>${s}</li>`).join('')}</ol>
+  </section>`;
+}
+
 function renderQuiz() {
   const q = qById(quiz.qids[quiz.index]);
   if (!q) { finishQuiz(); return; }
+  if (typeof window !== 'undefined') window.__assistantQuestion = q;
   if (!quiz.preparedFor || quiz.preparedFor !== q.id) {
     prepareQuestion(q);
     quiz.preparedFor = q.id;
@@ -5756,10 +5932,12 @@ function renderQuiz() {
         <span class="chip">第 ${l.num} 课 · ${l.title}</span>
         <span class="chip teal">${TYPE_LABEL[q.type]}</span>
         <span class="chip gold">${q.level === 1 ? '基础' : q.level === 2 ? '提升' : '综合'}</span>
+        ${isMotherQuestion(q) ? '<span class="chip" style="background:var(--teal-soft);color:var(--teal)">母题</span>' : ''}
         ${q.type === 'match' && quiz.matchMistakes > 0 ? `<span class="chip coral">失误 ${quiz.matchMistakes} 次</span>` : ''}
       </div>
       ${q.source ? `<div class="quiz-source">“${esc(q.source)}”<small>—— 材料选自教材相关史事</small></div>` : ''}
       <div class="quiz-stem-big">${esc(q.stem)}</div>
+      ${readingTipHTML(q)}
       ${bodyHTML}
       ${!quiz.checked ? `<div class="quiz-foot">
         <button class="hint-btn" id="hintBtn">${quiz.showHint ? '收起提示' : '💡 看提示'}</button>
@@ -5775,6 +5953,7 @@ function renderQuiz() {
         <p class="feedback-answer"><b>正确答案：</b>${esc(answerText)}</p>
         <p>${esc(q.explain)}</p>
         <div class="solution"><b>知识点：</b>${esc(q.point)} · ${esc(l.core)}</div>
+        <div class="read-review"><b>审题复盘：</b>${questionReading(q).steps.map((s, i) => `${i + 1}. ${s}`).join(' ')}</div>
         <details class="knowledge-details"><summary>📘 展开知识卡回顾</summary><div class="knowledge-recap">${knowledgeRecapHTML(q)}</div></details>
       </div>
       <div class="quiz-foot">
@@ -5784,11 +5963,15 @@ function renderQuiz() {
     </div>
   </div></div>`;
 
+  $$('[data-read-speak]').forEach(btn => btn.addEventListener('click', () => {
+    if (typeof speakQuestion === 'function') speakQuestion(q);
+    else toast('先点右下角的小光，打开语音助手。', '🔊');
+  }));
   const quit = $('#quitQuiz');
   if (quit) quit.addEventListener('click', e => {
     e.preventDefault();
     if (quiz.answers.length && !confirm('退出后本轮成绩不会保存，确定退出吗？')) return;
-    quiz = null; quizResult = null; location.hash = '#practice'; renderPractice();
+    quiz = null; quizResult = null; if (typeof window !== 'undefined') window.__assistantQuestion = null; location.hash = '#practice'; renderPractice();
   });
   if (q.type === 'choice') {
     $$('[data-opt]').forEach(btn => btn.addEventListener('click', () => {
@@ -5978,6 +6161,11 @@ function renderResult() {
   if (retry) retry.addEventListener('click', () => startQuiz({ qids: wrongQids, mode: 'review', title: '重练本轮错题' }));
   quizResult = null;
 }
+
+
+
+
+
 
 
 
@@ -8263,6 +8451,471 @@ function initSync() {
 
 
 
+/* ---------- app/assistant.js ---------- */
+/* ============================================================
+   小光 · 学习小助手
+   语音朗读 / 学习计时与超时提醒 / 本地知识库 / 可选 AI / 全站搜索
+   ============================================================ */
+const ASSISTANT_KEY = 'timeship_assistant_v1';
+
+const ASSISTANT_GREETINGS = [
+  '今天也不用学很多，弄懂一个“为什么”，就很赚。',
+  '我不替你写答案，但我可以陪你把题读懂。',
+  '卡住的时候先别急，我们把题拆小一点。',
+  '学习不是比谁快，是比谁愿意多问一句。',
+  '今天想先攻克哪一件小事？'
+];
+
+function loadAssistantPrefs() {
+  let raw = {};
+  try { raw = JSON.parse(localStorage.getItem(ASSISTANT_KEY) || '{}'); } catch (e) { raw = {}; }
+  return {
+    voice: raw.voice !== false,
+    breakMin: [20, 30, 40, 45, 60].includes(Number(raw.breakMin)) ? Number(raw.breakMin) : 40,
+    ai: raw.ai && typeof raw.ai === 'object' ? raw.ai : { endpoint: '', model: '', key: '' }
+  };
+}
+let assistantPrefs = loadAssistantPrefs();
+const assistantRuntime = {
+  open: false, greeted: false, studySec: 0, nextBreak: 0,
+  timer: 0, typing: false, lastSpoken: '', hintTimer: 0
+};
+
+function saveAssistantPrefs() {
+  try { localStorage.setItem(ASSISTANT_KEY, JSON.stringify(assistantPrefs)); } catch (e) { /* noop */ }
+}
+function assistantAIReady() {
+  return !!(assistantPrefs.ai && assistantPrefs.ai.endpoint && assistantPrefs.ai.key);
+}
+
+function assistantRobotSVG() {
+  return `<svg viewBox="0 0 64 64" role="img" aria-label="学习助手小光">
+    <path d="M32 7 V14" stroke="#24544A" stroke-width="2.4" stroke-linecap="round"/>
+    <circle cx="32" cy="6" r="3.2" fill="#E8C16A" stroke="#24544A" stroke-width="1.6"/>
+    <rect x="13" y="15" width="38" height="32" rx="13" fill="#E4F1EC" stroke="#24544A" stroke-width="2.4"/>
+    <rect x="20" y="24" width="24" height="14" rx="7" fill="#FFFDF8" stroke="#24544A" stroke-width="1.4"/>
+    <circle cx="27" cy="31" r="2.4" fill="#24544A"/>
+    <circle cx="37" cy="31" r="2.4" fill="#24544A"/>
+    <path d="M29 35 Q32 37.5 35 35" fill="none" stroke="#24544A" stroke-width="1.4" stroke-linecap="round"/>
+    <rect x="7" y="26" width="6" height="10" rx="3" fill="#3F7A6A"/>
+    <rect x="51" y="26" width="6" height="10" rx="3" fill="#3F7A6A"/>
+    <path d="M24 47 V51 M40 47 V51" stroke="#24544A" stroke-width="2.2" stroke-linecap="round"/>
+    <rect x="20" y="50" width="24" height="5" rx="2.5" fill="#3F7A6A"/>
+  </svg>`;
+}
+
+function initAssistant() {
+  const root = $('#assistantRoot');
+  if (!root) return;
+  root.innerHTML = `
+    <div class="assistant-hint" id="assistantHint">遇到不会的，点我</div>
+    <button class="assistant-fab" id="assistantFab" type="button" aria-label="打开学习助手小光" aria-expanded="false">
+      <span class="assistant-fab-robot">${assistantRobotSVG()}</span>
+      <i class="assistant-pulse" aria-hidden="true"></i>
+    </button>
+    <section class="assistant-panel" id="assistantPanel" aria-label="学习助手小光" aria-hidden="true">
+      <header class="assistant-head">
+        <span class="assistant-avatar">${assistantRobotSVG()}</span>
+        <div class="assistant-title"><b>小光</b><small>你的学习搭档${assistantAIReady() ? ' · AI 已配置' : ' · 本地知识库'}</small></div>
+        <div class="assistant-head-actions">
+          <button type="button" class="assistant-icon-btn" id="assistantVoice" aria-label="语音朗读开关" title="语音朗读">${assistantPrefs.voice ? '🔊' : '🔇'}</button>
+          <button type="button" class="assistant-icon-btn" id="assistantSettings" aria-label="小光设置" title="设置">⚙</button>
+          <button type="button" class="assistant-icon-btn" id="assistantClose" aria-label="收起小光" title="收起">✕</button>
+        </div>
+      </header>
+      <div class="assistant-body" id="assistantBody" aria-live="polite"></div>
+      <div class="assistant-quick" id="assistantQuick"></div>
+      <div class="assistant-input-row">
+        <input id="assistantInput" type="text" maxlength="200" placeholder="问我：什么是全过程人民民主？" autocomplete="off" aria-label="向小光提问">
+        <button class="assistant-send" id="assistantSend" type="button" aria-label="发送">➤</button>
+      </div>
+      <div class="assistant-foot">
+        <span id="assistantTimer">已学习 0 分钟</span>
+        <button type="button" class="assistant-break-link" id="assistantBreakBtn">休息一下</button>
+      </div>
+    </section>`;
+
+  $('#assistantFab').addEventListener('click', () => assistantRuntime.open ? closeAssistant() : openAssistant());
+  $('#assistantClose').addEventListener('click', closeAssistant);
+  $('#assistantVoice').addEventListener('click', () => {
+    assistantPrefs.voice = !assistantPrefs.voice;
+    saveAssistantPrefs();
+    $('#assistantVoice').textContent = assistantPrefs.voice ? '🔊' : '🔇';
+    if (!assistantPrefs.voice) stopSpeak();
+    toast(assistantPrefs.voice ? '小光会读给你听。' : '已关闭语音。', assistantPrefs.voice ? '🔊' : '🔇', 1600);
+  });
+  $('#assistantSettings').addEventListener('click', openAssistantSettings);
+  $('#assistantBreakBtn').addEventListener('click', () => assistantBreak(true));
+  $('#assistantSend').addEventListener('click', sendAssistantInput);
+  $('#assistantInput').addEventListener('keydown', e => { if (e.key === 'Enter') sendAssistantInput(); });
+  $('#assistantQuick').addEventListener('click', e => {
+    const b = e.target.closest('[data-assistant-q]');
+    if (!b) return;
+    if (b.dataset.assistantAction === 'search') { openSearch(); return; }
+    if (b.dataset.assistantAction === 'break') { assistantBreak(true); return; }
+    if (b.dataset.assistantAction === 'speak') { const last = assistantRuntime.lastSpoken; if (last) speakText(last); else toast('先问我一个问题吧。', '🔊'); return; }
+    askAssistant(b.dataset.assistantQ || b.textContent);
+  });
+  $('#assistantBody').addEventListener('click', e => {
+    if (e.target.closest('.assistant-link')) setTimeout(closeAssistant, 80);
+  });
+  assistantRuntime.nextBreak = assistantPrefs.breakMin * 60;
+  assistantRuntime.timer = setInterval(() => {
+    if (document.visibilityState !== 'visible') return;
+    assistantRuntime.studySec += 30;
+    updateAssistantTimer();
+    if (assistantRuntime.studySec >= assistantRuntime.nextBreak) assistantBreak(false);
+  }, 30000);
+  updateAssistantTimer();
+  const hint = $('#assistantHint');
+  if (hint) {
+    hint.textContent = ASSISTANT_GREETINGS[new Date().getDate() % ASSISTANT_GREETINGS.length];
+    hint.addEventListener('click', openAssistant);
+  }
+  setTimeout(() => {
+    if (!assistantRuntime.open && hint) {
+      hint.classList.add('show');
+      setTimeout(() => hint.classList.remove('show'), 9000);
+    }
+  }, 4500);
+}
+
+function openAssistant() {
+  assistantRuntime.open = true;
+  $('#assistantPanel').classList.add('open');
+  $('#assistantPanel').setAttribute('aria-hidden', 'false');
+  $('#assistantFab').setAttribute('aria-expanded', 'true');
+  $('#assistantHint')?.classList.remove('show');
+  setTimeout(() => $('#assistantInput')?.focus(), 120);
+  if (!assistantRuntime.greeted) {
+    assistantRuntime.greeted = true;
+    const line = ASSISTANT_GREETINGS[new Date().getDate() % ASSISTANT_GREETINGS.length];
+    assistantSay(`嗨，我是小光，你的学习搭档。${line}<br><span class="assistant-soft">不会的题、读不懂的题、想搜的知识点，都可以问我。也可以让我读给你听。</span>`, { speak: true, quick: true });
+  }
+}
+function closeAssistant() {
+  assistantRuntime.open = false;
+  $('#assistantPanel')?.classList.remove('open');
+  $('#assistantPanel')?.setAttribute('aria-hidden', 'true');
+  $('#assistantFab')?.setAttribute('aria-expanded', 'false');
+  stopSpeak();
+}
+
+function assistantSay(text, opts = {}) {
+  const body = $('#assistantBody');
+  if (!body) return;
+  const div = document.createElement('div');
+  div.className = `assistant-msg bot ${opts.cls || ''}`;
+  div.innerHTML = opts.html === false ? esc(text).replace(/\n/g, '<br>') : text;
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+  const plain = String(text).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  if (plain) {
+    assistantRuntime.lastSpoken = plain;
+    if (opts.speak !== false && assistantPrefs.voice) speakText(plain);
+  }
+  if (opts.quick) renderAssistantQuick(opts.quick === true ? null : opts.quick);
+}
+function assistantUserSay(text) {
+  const body = $('#assistantBody');
+  if (!body) return;
+  const div = document.createElement('div');
+  div.className = 'assistant-msg user';
+  div.textContent = text;
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+}
+
+function renderAssistantQuick(items) {
+  const box = $('#assistantQuick');
+  if (!box) return;
+  const list = items || [
+    { label: '今天学什么', q: '今天学什么' },
+    { label: '帮我审题', q: '帮我审题' },
+    { label: '全网页搜索', action: 'search' },
+    { label: '休息一下', action: 'break' }
+  ];
+  box.innerHTML = list.map(it => `<button type="button" data-assistant-q="${esc(it.q || it.label)}" ${it.action ? `data-assistant-action="${it.action}"` : ''}>${esc(it.label)}</button>`).join('');
+}
+
+function sendAssistantInput() {
+  const input = $('#assistantInput');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  askAssistant(text);
+}
+
+async function askAssistant(text) {
+  assistantUserSay(text);
+  assistantRuntime.typing = true;
+  renderAssistantQuick([
+    { label: '全网页搜索', action: 'search' },
+    { label: '休息一下', action: 'break' }
+  ]);
+  const typing = assistantTyping();
+  const query = String(text).trim();
+
+  if (/^(搜索|查找|搜一下)/.test(query)) {
+    const kw = query.replace(/^(搜索|查找|搜一下)/, '').trim();
+    assistantTypingRemove(typing);
+    assistantSay(kw ? `好，我帮你打开全站搜索：<b>${esc(kw)}</b>` : '好，打开全站搜索。', { speak: true });
+    openSearch(kw);
+    return;
+  }
+
+  let reply = null;
+  let aiFailed = false;
+  if (assistantAIReady() && !/^(今天学什么|休息一下)$/.test(query)) {
+    try {
+      reply = await askAssistantAI(query);
+      if (!reply) aiFailed = true;
+    } catch (e) {
+      reply = null;
+      aiFailed = true;
+    }
+  }
+  assistantTypingRemove(typing);
+  if (!reply) reply = localAssistantAnswer(query);
+  if (aiFailed) reply += '<br><span class="assistant-soft">AI 这次没连上，先用本地知识库回答你。可以到设置里检查接口地址、Key 或 CORS。</span>';
+  assistantSay(reply, { html: true, speak: true, quick: true });
+  assistantRuntime.typing = false;
+}
+
+function assistantTyping() {
+  const body = $('#assistantBody');
+  if (!body) return null;
+  const div = document.createElement('div');
+  div.className = 'assistant-msg bot assistant-typing';
+  div.innerHTML = '<i></i><i></i><i></i>';
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+  return div;
+}
+function assistantTypingRemove(el) { if (el && el.parentNode) el.parentNode.removeChild(el); }
+
+function assistantCurrentQuestion() {
+  return (typeof window !== 'undefined' && window.__assistantQuestion) || null;
+}
+
+function localAssistantAnswer(query) {
+  const q = assistantCurrentQuestion();
+  if (/^(你好|嗨|hello|在吗|小光)/i.test(query)) {
+    return `我在。今天也不用学很多，选一个最想弄懂的问题就行。你可以问我知识点，也可以让我帮你审题。`;
+  }
+  if (/^(谢谢|感谢|懂了|明白了)/.test(query)) {
+    return `不客气。能把“不会”说清楚，本身就是进步。需要的话，我随时在右下角。`;
+  }
+  if (/帮我审题|怎么审题|读不懂|不会做|没思路|提示/.test(query)) {
+    if (q && typeof questionReading === 'function') {
+      const r = questionReading(q);
+      return `<b>先不急着选答案，我们只做三件事：</b><ol class="assistant-steps">${r.steps.map(s => `<li>${s}</li>`).join('')}</ol>
+        <p class="assistant-soft">题眼：${r.eyes.join('、')}。你先圈出来，再回头看选项。</p>
+        <a class="assistant-link" href="#" data-assistant-action="speak">🔊 让小光读题</a>`;
+    }
+    return '先把题干读两遍：第一遍找“它在问什么”，第二遍圈出时间、人物、限定词。你可以在闯关页点「🔊 读题」，我读给你听。';
+  }
+  if (/答案|解析|为什么错/.test(query) && q) {
+    return `这道题我不直接替你选。你先看「审题提示」，把题眼和限定词圈出来；如果还卡住，点题目下方的“看提示”，再对照解析。<br><span class="assistant-soft">知识点：${esc(q.point || '')}</span>`;
+  }
+  if (/今天学什么|学什么|推荐/.test(query)) {
+    const u = typeof recommendUnit === 'function' ? recommendUnit() : null;
+    if (u) return `今天可以从《${esc(u.title)}》开始。它的大问题是：${esc(u.bigQuestion || '')}<br><a class="assistant-link" href="#unit/${u.id}/knowledge">去这一单元 →</a>`;
+  }
+  if (/你是谁|会什么|能做什么/.test(query)) {
+    return `我是小光。可以：① 读题、读知识卡给你听；② 帮你找知识点、搜全站；③ 提醒你休息；④ 在你配置 AI 后回答更开放的问题。我不会直接替你写作业，但会陪你把思路走通。`;
+  }
+  const hits = assistantSearch(query);
+  if (!hits.length) {
+    return `我在课本里暂时没找到“${esc(query)}”。可以换个关键词，或点「全网页搜索」；如果你在设置里配置了 AI，也可以直接问我更开放的问题。`;
+  }
+  const h = hits[0];
+  if (h.type === 'lesson') {
+    return `<b>《${esc(h.lesson.title)}》</b><br>${esc(h.lesson.core)}<br><span class="assistant-soft">${esc((h.lesson.points || [])[0] || '')}</span><br><a class="assistant-link" href="#unit/${h.lesson.unit}/knowledge">去这一课 →</a>`;
+  }
+  if (h.type === 'term') {
+    return `<b>${esc(h.term[0])}</b>：${esc(h.term[1])}<br><a class="assistant-link" href="#unit/${h.lesson.unit}/knowledge">在《${esc(h.lesson.title)}》里看上下文 →</a>`;
+  }
+  if (h.type === 'question') {
+    return `这道题考的是「${esc(h.q.point)}」，出自《${esc(h.lesson.title)}》。<br>你先看题干里的限定词，再想这一课的核心结论。需要我陪你拆题，点「帮我审题」。<br><a class="assistant-link" href="#unit/${h.q.unit}/quiz">去做这一单元的题 →</a>`;
+  }
+  return `我找到：<b>${esc(h.title)}</b><br>${esc(h.text || '')}`;
+}
+
+function assistantSearch(query) {
+  const clean = String(query || '').replace(/[？?！!。，,、；;：:\s]/g, '');
+  if (!clean) return [];
+  const terms = [];
+  for (let i = 0; i < clean.length - 1; i++) terms.push(clean.slice(i, i + 2));
+  const scoreText = (text, weight = 1) => {
+    const s = String(text || '');
+    let n = s.includes(clean) ? 20 * weight : 0;
+    terms.forEach(t => { if (s.includes(t)) n += 1; });
+    return n;
+  };
+  const out = [];
+  const currentSid = currentSubject();
+  const lessons = LESSONS;
+  lessons.forEach(l => {
+    const isCurrent = subjectOfLesson(l.id) === currentSid;
+    let score = scoreText(l.title, 3) + scoreText(l.core, 1.4) + scoreText((l.points || []).join(''), 1.1) + (isCurrent ? 3 : 0);
+    (l.terms || []).forEach(t => { if (t[0] === clean) score += 18; else if (t[0].includes(clean)) score += 8; });
+    if (score > 0) out.push({ type: 'lesson', score, lesson: l, title: l.title, text: l.core });
+    (l.terms || []).forEach(t => {
+      const ts = (t[0] === clean ? 22 : 0) + (t[0].includes(clean) ? 7 : 0) + scoreText(t[1], 0.6);
+      if (ts > 0) out.push({ type: 'term', score: ts, lesson: l, term: t, title: t[0], text: t[1] });
+    });
+  });
+  subjectQuestions(currentSid).forEach(q => {
+    let score = scoreText(q.stem, 1.2) + scoreText(q.point, 2) + scoreText(q.explain, .4);
+    if (score > 0) out.push({ type: 'question', score, q, lesson: lessonById(q.lesson), title: q.point, text: q.stem.slice(0, 50) });
+  });
+  (typeof DAO_GUIDE !== 'undefined' ? DAO_GUIDE : []).forEach(g => {
+    const sc = scoreText(g.title, 2.5) + scoreText(g.text, 1);
+    if (sc > 0) out.push({ type: 'guide', score: sc, title: g.title, text: g.text, href: `#unit/${g.unit}/knowledge` });
+  });
+  return out.sort((a, b) => b.score - a.score).slice(0, 4);
+}
+
+async function askAssistantAI(query) {
+  const ai = assistantPrefs.ai || {};
+  const endpoint = String(ai.endpoint || '').trim();
+  if (!endpoint || !ai.key) return null;
+  const url = /\/chat\/completions\/?$/.test(endpoint) ? endpoint : endpoint.replace(/\/$/, '') + '/chat/completions';
+  const q = assistantCurrentQuestion();
+  const context = q ? `当前题目：${q.stem}\n知识点：${q.point}\n题型：${q.type}` : `当前学科：${subjectById(currentSubject()).name}`;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 20000);
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ai.key}` },
+      body: JSON.stringify({
+        model: ai.model || 'deepseek-chat',
+        temperature: 0.5,
+        max_tokens: 500,
+        messages: [
+          { role: 'system', content: `你是初中学习助手“小光”，面向 11—15 岁学生。用中文回答，先给方法或提示，不要直接替学生写作业；如果学生问答案，先引导审题，再简要说明理由。回答不超过 220 字，必要时分 2—3 点。${context}` },
+          { role: 'user', content: query }
+        ]
+      }),
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+    if (!res.ok) throw new Error('AI HTTP ' + res.status);
+    const data = await res.json();
+    const text = data?.choices?.[0]?.message?.content;
+    return text ? esc(text).replace(/\n/g, '<br>') : null;
+  } catch (e) {
+    clearTimeout(timer);
+    return null;
+  }
+}
+
+function speakText(text) {
+  const plain = String(text || '').replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!plain || !('speechSynthesis' in window)) return false;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(plain.slice(0, 700));
+    u.lang = 'zh-CN';
+    u.rate = 0.98;
+    u.pitch = 1.04;
+    const voices = window.speechSynthesis.getVoices() || [];
+    const zh = voices.find(v => /zh[-_]CN|Chinese|中文/i.test(v.lang + v.name));
+    if (zh) u.voice = zh;
+    window.speechSynthesis.speak(u);
+    return true;
+  } catch (e) { return false; }
+}
+function stopSpeak() {
+  try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (e) { /* noop */ }
+}
+function speakQuestion(q) {
+  if (!q) return;
+  const opts = q.type === 'choice' ? `选项：${q.options.map((o, i) => `${'ABCD'[i]}. ${o}`).join('；')}` : q.type === 'fill' ? '这是一道填空题。' : q.type === 'order' ? '这是一道排序题。' : '这是一道配对题。';
+  if (!assistantPrefs.voice) {
+    assistantPrefs.voice = true;
+    saveAssistantPrefs();
+    if ($('#assistantVoice')) $('#assistantVoice').textContent = '🔊';
+  }
+  speakText(`题目：${q.stem}。${opts}`);
+  toast('小光读题中，跟着圈出关键词。', '🔊', 1800);
+}
+
+function updateAssistantTimer() {
+  const el = $('#assistantTimer');
+  if (!el) return;
+  const mins = Math.floor(assistantRuntime.studySec / 60);
+  el.textContent = `已学习 ${mins} 分钟 · ${assistantPrefs.breakMin} 分钟提醒`;
+}
+function assistantBreak(manual) {
+  assistantRuntime.nextBreak = assistantRuntime.studySec + 600;
+  openAssistant();
+  const msg = manual
+    ? '好，先停一下。站起来伸个懒腰，看看窗外 20 秒，再回来。'
+    : `⏰ 已经专注 ${assistantPrefs.breakMin} 分钟啦。站起来走两步、喝口水，让眼睛也下课 5 分钟。`;
+  assistantSay(`${msg}<div class="assistant-break-actions"><button type="button" data-break-action="rest">好，休息 5 分钟</button><button type="button" data-break-action="snooze">再学 10 分钟</button></div>`, { speak: true, cls: 'break' });
+  const body = $('#assistantBody');
+  body?.querySelectorAll('[data-break-action]').forEach(btn => btn.addEventListener('click', () => {
+    if (btn.dataset.breakAction === 'rest') {
+      assistantRuntime.studySec = 0;
+      assistantRuntime.nextBreak = assistantPrefs.breakMin * 60;
+      assistantSay('好，去休息一下。回来我们继续。', { speak: true });
+    } else {
+      assistantRuntime.nextBreak = assistantRuntime.studySec + 600;
+      assistantSay('行，再学 10 分钟。到点我再来叫你。', { speak: true });
+    }
+    updateAssistantTimer();
+  }));
+}
+
+function openAssistantSettings() {
+  const ai = assistantPrefs.ai || {};
+  openModal({
+    title: '小光设置',
+    body: `<div class="assistant-settings-form">
+      <label class="assistant-setting-row"><input type="checkbox" id="assistantVoiceSet" ${assistantPrefs.voice ? 'checked' : ''}> <span><b>语音朗读</b><small>读题、读解析、休息提醒</small></span></label>
+      <label class="assistant-setting-row"><span><b>学习提醒</b><small>连续使用电脑多久提醒休息</small></span>
+        <select id="assistantBreakSet">${[20, 30, 40, 45, 60].map(m => `<option value="${m}" ${assistantPrefs.breakMin === m ? 'selected' : ''}>${m} 分钟</option>`).join('')}</select>
+      </label>
+      <div class="assistant-setting-sep"></div>
+      <p class="small muted" style="margin:0 0 8px">AI 增强（可选）：配置 OpenAI 兼容接口后，小光可以回答更开放的问题。不配置也能用本地知识库、搜索和审题提示。</p>
+      <label class="assistant-setting-field">接口地址<input id="assistantEndpoint" type="url" value="${esc(ai.endpoint || '')}" placeholder="https://api.deepseek.com/chat/completions"></label>
+      <label class="assistant-setting-field">模型<input id="assistantModel" type="text" value="${esc(ai.model || '')}" placeholder="deepseek-chat"></label>
+      <label class="assistant-setting-field">API Key<input id="assistantKey" type="password" value="${esc(ai.key || '')}" placeholder="只保存在本机" autocomplete="off"></label>
+      <p class="small muted" style="margin:8px 0 0;line-height:1.7">Key 只保存在本机浏览器，不会随学习记录同步。浏览器直连接口可能被 CORS 拦截；如失败，请填写你自己的代理地址。</p>
+      <button type="button" class="btn btn-sm btn-ghost" id="assistantTestVoice" style="margin-top:10px">试听语音</button>
+    </div>`,
+    actions: [
+      { text: '取消' },
+      { text: '保存', primary: true, onClick: () => {
+        assistantPrefs.voice = !!$('#assistantVoiceSet')?.checked;
+        assistantPrefs.breakMin = Number($('#assistantBreakSet')?.value || 40);
+        assistantPrefs.ai = {
+          endpoint: $('#assistantEndpoint')?.value.trim() || '',
+          model: $('#assistantModel')?.value.trim() || '',
+          key: $('#assistantKey')?.value.trim() || ''
+        };
+        saveAssistantPrefs();
+        assistantRuntime.nextBreak = assistantRuntime.studySec + assistantPrefs.breakMin * 60;
+        if ($('#assistantVoice')) $('#assistantVoice').textContent = assistantPrefs.voice ? '🔊' : '🔇';
+        const status = $('.assistant-title small');
+        if (status) status.textContent = `你的学习搭档${assistantAIReady() ? ' · AI 已配置' : ' · 本地知识库'}`;
+        updateAssistantTimer();
+        toast('小光设置已保存。', '⚙️');
+      } }
+    ]
+  });
+  $('#assistantTestVoice')?.addEventListener('click', () => speakText('你好，我是小光。今天也不用学很多，弄懂一个为什么就很棒。'));
+}
+
+window.speakText = speakText;
+window.speakQuestion = speakQuestion;
+
+
+
 /* ---------- app/boot.js ---------- */
 /* ============================================================
    启动
@@ -8300,8 +8953,10 @@ function init() {
   window.addEventListener('hashchange', route);
   route();
   initSync();
+  initAssistant();
 }
 init();
+
 
 
 
@@ -8309,5 +8964,7 @@ init();
 </script>
 </body>
 </html>
+
+
 
 
