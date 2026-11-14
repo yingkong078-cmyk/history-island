@@ -963,7 +963,8 @@ body[data-subject="dao"] .nav-ico { color: #2F6C60; }
   .topbar { flex-wrap: wrap; gap: 8px 12px; padding: 10px 16px; }
   .brand { order: 1; }
   .top-actions { order: 2; margin-left: auto; }
-  .subject-tabs { order: 3; width: 100%; justify-content: center; }\n  .main-nav { order: 4; width: 100%; flex: 1 0 100%; padding-bottom: 2px; }
+  .subject-tabs { order: 3; width: 100%; justify-content: center; }
+  .main-nav { order: 4; width: 100%; flex: 1 0 100%; padding-bottom: 2px; }
   .main-nav a { padding: 7px 10px; font-size: 12.5px; }
   .page-wrap { padding: 16px 16px 64px; }
   .hero { padding-top: 20px; }
@@ -1208,7 +1209,19 @@ body[data-subject="dao"] .hero h1 .highlight::after { background: rgba(47, 108, 
 }
 
 /* ---------- 学习助手 · 小光 ---------- */
-.assistant-fab { position: fixed; right: 22px; bottom: 22px; z-index: 140; width: 64px; height: 64px; border-radius: 50%; background: #E4F1EC; border: 1.5px solid rgba(47,108,96,.35); box-shadow: 0 10px 28px rgba(35,70,60,.22); display: grid; place-items: center; transition: transform .18s; }
+.assistant-fab { position: fixed; right: 22px; bottom: 22px; z-index: 140; width: 64px; height: 64px; border-radius: 50%; background: #E4F1EC; border: 1.5px solid rgba(47,108,96,.35); box-shadow: 0 10px 28px rgba(35,70,60,.22); display: grid; place-items: center; transition: transform .18s; cursor: grab; touch-action: none; }
+.assistant-fab:active { cursor: grabbing; }
+.assistant-fab.docked { width: 40px; height: 60px; border-radius: 12px 0 0 12px; opacity: .94; box-shadow: 0 8px 20px rgba(35,70,60,.24); transition: opacity .18s, transform .18s; }
+.assistant-fab.docked:hover { transform: none; opacity: 1; }
+.assistant-fab.docked.dock-left { border-radius: 0 12px 12px 0; }
+.assistant-fab.docked .assistant-fab-robot { width: 34px; height: 34px; transform: translateX(7px); }
+.assistant-fab.docked.dock-left .assistant-fab-robot { transform: translateX(-7px); }
+.assistant-fab.docked .assistant-pulse { display: none; }
+.assistant-fab.dragging { transform: scale(1.06); cursor: grabbing; box-shadow: 0 16px 38px rgba(35,70,60,.3); }
+.assistant-panel.dragging { transition: none; box-shadow: 0 26px 70px rgba(35,70,60,.32); }
+body.assistant-dragging { cursor: grabbing; user-select: none; }
+.assistant-grip { color: var(--muted); font-size: 15px; letter-spacing: -3px; padding: 0 1px; user-select: none; }
+#assistantRoot.docked .assistant-hint { display: none; }
 .assistant-fab:hover { transform: translateY(-3px) scale(1.03); }
 .assistant-fab-robot { width: 54px; height: 54px; display: block; }
 .assistant-pulse { position: absolute; right: 5px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 0 rgba(180,136,51,.4); animation: assistantPulse 2.4s infinite; }
@@ -1217,7 +1230,9 @@ body[data-subject="dao"] .hero h1 .highlight::after { background: rgba(47, 108, 
 .assistant-hint.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .assistant-panel { position: fixed; right: 22px; bottom: 96px; z-index: 138; width: min(380px, calc(100vw - 28px)); max-height: min(680px, calc(100vh - 120px)); display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 22px 60px rgba(45,35,20,.24); overflow: hidden; opacity: 0; transform: translateY(12px) scale(.98); pointer-events: none; transition: .18s; }
 .assistant-panel.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
-.assistant-head { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: linear-gradient(135deg, #E4F1EC, #F7F1E6); border-bottom: 1px solid var(--line); }
+.assistant-head { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: linear-gradient(135deg, #E4F1EC, #F7F1E6); border-bottom: 1px solid var(--line); cursor: grab; touch-action: none; }
+.assistant-head:active { cursor: grabbing; }
+.assistant-head button, .assistant-head input { cursor: pointer; }
 .assistant-avatar { width: 38px; height: 38px; flex: 0 0 auto; }
 .assistant-title { flex: 1; min-width: 0; line-height: 1.25; }
 .assistant-title b { display: block; font-family: var(--serif); font-size: 16px; }
@@ -1266,7 +1281,8 @@ body[data-subject="dao"] .hero h1 .highlight::after { background: rgba(47, 108, 
   .assistant-hint { right: 82px; bottom: 24px; }
   .assistant-body { max-height: 42vh; }
 }
-@media print { .assistant-fab, .assistant-panel, .assistant-hint { display: none !important; } }
+@media print {
+  .assistant-fab, .assistant-panel, .assistant-hint { display: none !important; }
   .topbar, .site-footer, .toast-wrap, #confettiCanvas, #modalRoot, .btn, .btn-row, .section-link, .page-atmosphere { display: none !important; }
   body { background: #fff; }
   .page-wrap { max-width: 100%; padding: 0; }
@@ -1276,6 +1292,7 @@ body[data-subject="dao"] .hero h1 .highlight::after { background: rgba(47, 108, 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
 
 
 
@@ -4322,19 +4339,22 @@ function buildSearchIndex() {
   if (SEARCH_INDEX.length) return;
   VOLUMES.forEach(v => {
     const first = volumeUnits(v.id)[0];
-    SEARCH_INDEX.push({ kind: '分册', title: v.name, sub: `${v.short} · ${v.era} · ${volumeUnits(v.id).length} 个单元`, href: first ? `#unit/${first.id}/knowledge` : '#courses', keys: `${v.name}${v.short}${v.era}${v.desc}` });
+    SEARCH_INDEX.push({ kind: '分册', subject: v.subject || 'history', title: v.name, sub: `${v.short} · ${v.era} · ${volumeUnits(v.id).length} 个单元`, href: first ? `#unit/${first.id}/knowledge` : '#courses', keys: `${v.name}${v.short}${v.era}${v.desc}` });
   });
-  UNITS.forEach(u => SEARCH_INDEX.push({ kind: '单元', title: `第 ${u.num} 单元 · ${u.title}`, sub: `${volumeById(u.volume)?.short || ''} · ${u.years}`, href: `#unit/${u.id}`, keys: `${u.title}${u.short}${u.years}${u.tagline}` }));
+  UNITS.forEach(u => SEARCH_INDEX.push({ kind: '单元', subject: subjectOfUnit(u.id), title: `第 ${u.num} 单元 · ${u.title}`, sub: `${volumeById(u.volume)?.short || ''} · ${u.years}`, href: `#unit/${u.id}`, keys: `${u.title}${u.short}${u.years}${u.tagline}` }));
   LESSONS.forEach(l => {
     const uv = unitById(l.unit)?.volume;
-    SEARCH_INDEX.push({ kind: '课时', title: `第 ${l.num} 课 · ${l.title}`, sub: `${volumeById(uv)?.short || ''} · ${l.years} · ${l.tag}`, href: `#unit/${l.unit}/knowledge`, keys: `${l.title}${l.tag}${l.core}${l.points.join('')}${l.terms.map(t => t[0]).join('')}` });
-    l.terms.forEach(t => SEARCH_INDEX.push({ kind: '名词', title: t[0], sub: t[1], href: `#unit/${l.unit}/knowledge`, keys: t[0] + t[1] }));
+    const sid = subjectOfLesson(l.id);
+    SEARCH_INDEX.push({ kind: '课时', subject: sid, title: `第 ${l.num} 课 · ${l.title}`, sub: `${volumeById(uv)?.short || ''} · ${l.years} · ${l.tag}`, href: `#unit/${l.unit}/knowledge`, keys: `${l.title}${l.tag}${l.core}${l.points.join('')}${l.terms.map(t => t[0]).join('')}` });
+    l.terms.forEach(t => SEARCH_INDEX.push({ kind: '名词', subject: sid, title: t[0], sub: t[1], href: `#unit/${l.unit}/knowledge`, keys: t[0] + t[1] }));
+    (l.figures || []).forEach(f => SEARCH_INDEX.push({ kind: '人物', subject: sid, title: f[0], sub: f[1], href: `#unit/${l.unit}/knowledge`, keys: f[0] + f[1] }));
+    (l.events || []).forEach(e => SEARCH_INDEX.push({ kind: '事件', subject: sid, title: e[0], sub: e[1], href: `#unit/${l.unit}/knowledge`, keys: e[0] + e[1] }));
   });
-  TOPICS.forEach(t => SEARCH_INDEX.push({ kind: '专题', title: t.title, sub: t.desc, href: `#topic/${t.id}`, keys: t.title + t.desc + t.intro }));
-  TIMELINE.forEach(e => SEARCH_INDEX.push({ kind: '年表', title: e.t, sub: e.text, href: '#guide', keys: e.text }));
-  QUESTIONS.forEach(q => SEARCH_INDEX.push({ kind: '题目', title: q.stem.slice(0, 40), sub: `${q.point} · ${q.type === 'choice' ? '选择' : q.type === 'fill' ? '填空' : q.type === 'order' ? '排序' : '配对'}`, href: `#unit/${q.unit}/quiz`, keys: `${q.stem}${q.point}${q.explain}` }));
-  if (typeof DAO_GUIDE !== 'undefined') DAO_GUIDE.forEach(g => SEARCH_INDEX.push({ kind: '道法速查', title: g.title, sub: g.text, href: `#unit/${g.unit}/knowledge`, keys: g.title + g.text }));
-  if (typeof DAO_SCENARIOS !== 'undefined') DAO_SCENARIOS.forEach(s => SEARCH_INDEX.push({ kind: '情境实验', title: s.title, sub: s.question, href: '#lab', keys: s.title + s.scene + s.principle }));
+  TOPICS.forEach(t => SEARCH_INDEX.push({ kind: '专题', subject: 'history', title: t.title, sub: t.desc, href: `#topic/${t.id}`, keys: t.title + t.desc + t.intro }));
+  TIMELINE.forEach(e => SEARCH_INDEX.push({ kind: '年表', subject: 'history', title: e.t, sub: e.text, href: '#guide', keys: e.text }));
+  QUESTIONS.forEach(q => SEARCH_INDEX.push({ kind: '题目', subject: subjectOfUnit(q.unit), title: q.stem.slice(0, 40), sub: `${q.point} · ${q.type === 'choice' ? '选择' : q.type === 'fill' ? '填空' : q.type === 'order' ? '排序' : '配对'}`, href: `#unit/${q.unit}/quiz`, keys: `${q.stem}${q.point}${q.explain}` }));
+  if (typeof DAO_GUIDE !== 'undefined') DAO_GUIDE.forEach(g => SEARCH_INDEX.push({ kind: '道法速查', subject: 'dao', title: g.title, sub: g.text, href: `#unit/${g.unit}/knowledge`, keys: g.title + g.text }));
+  if (typeof DAO_SCENARIOS !== 'undefined') DAO_SCENARIOS.forEach(s => SEARCH_INDEX.push({ kind: '情境实验', subject: 'dao', title: s.title, sub: s.question, href: '#lab', keys: s.title + s.scene + s.principle }));
 }
 function openSearch(initial = '') {
   buildSearchIndex();
@@ -4353,7 +4373,19 @@ function openSearch(initial = '') {
     const kw = input.value.trim().toLowerCase();
     const box = $('#searchResults');
     if (!kw) { box.innerHTML = '<div class="search-empty">输入关键词，查找单元、课时、名词、题目、专题、道法速查和大事年表。</div>'; return; }
-    const hits = SEARCH_INDEX.filter(item => (item.title + item.sub + item.keys).toLowerCase().includes(kw)).slice(0, 24);
+    const hits = SEARCH_INDEX.map(item => {
+      const title = item.title.toLowerCase(), sub = item.sub.toLowerCase(), keys = item.keys.toLowerCase();
+      let score = 0;
+      if (title === kw) score += 120;
+      else if (title.startsWith(kw)) score += 80;
+      else if (title.includes(kw)) score += 50;
+      if (keys.includes(kw)) score += 15;
+      if (sub.includes(kw)) score += 8;
+      if (item.subject === currentSubject()) score += 4;
+      score += ({ '名词': 12, '人物': 12, '课时': 8, '单元': 6, '事件': 6, '分册': 4, '专题': 3, '题目': 1, '年表': 1, '道法速查': 5, '情境实验': 3 }[item.kind] || 0);
+      if (item.kind === '题目') score -= 25;
+      return { item, score };
+    }).filter(x => x.score > 0).sort((a, b) => b.score - a.score).slice(0, 24).map(x => x.item);
     if (!hits.length) { box.innerHTML = '<div class="search-empty">没有找到相关内容，换个词试试。也可以去问右下角的小光。</div>'; return; }
     box.innerHTML = hits.map(h => `<a class="search-result" href="${h.href}"><span class="sr-kind">${h.kind}</span><span><b>${esc(h.title)}</b><span>${esc(h.sub).slice(0, 60)}</span></span></a>`).join('');
     $$('.search-result', box).forEach(a => a.addEventListener('click', () => closeModal()));
@@ -8469,16 +8501,22 @@ const ASSISTANT_GREETINGS = [
 function loadAssistantPrefs() {
   let raw = {};
   try { raw = JSON.parse(localStorage.getItem(ASSISTANT_KEY) || '{}'); } catch (e) { raw = {}; }
+  const validPos = p => p && Number.isFinite(Number(p.x)) && Number.isFinite(Number(p.y)) ? { x: Number(p.x), y: Number(p.y) } : null;
   return {
     voice: raw.voice !== false,
     breakMin: [20, 30, 40, 45, 60].includes(Number(raw.breakMin)) ? Number(raw.breakMin) : 40,
-    ai: raw.ai && typeof raw.ai === 'object' ? raw.ai : { endpoint: '', model: '', key: '' }
+    ai: raw.ai && typeof raw.ai === 'object' ? raw.ai : { endpoint: '', model: '', key: '' },
+    fabPos: validPos(raw.fabPos),
+    panelPos: validPos(raw.panelPos),
+    docked: !!raw.docked,
+    dockSide: raw.dockSide === 'left' ? 'left' : 'right'
   };
 }
 let assistantPrefs = loadAssistantPrefs();
 const assistantRuntime = {
   open: false, greeted: false, studySec: 0, nextBreak: 0,
-  timer: 0, typing: false, lastSpoken: '', hintTimer: 0
+  timer: 0, typing: false, lastSpoken: '', hintTimer: 0,
+  suppressClickUntil: 0
 };
 
 function saveAssistantPrefs() {
@@ -8504,22 +8542,202 @@ function assistantRobotSVG() {
   </svg>`;
 }
 
+function assistantViewport() {
+  return { w: document.documentElement.clientWidth || window.innerWidth, h: document.documentElement.clientHeight || window.innerHeight };
+}
+function assistantClamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+function assistantSetFabPosition(x, y, save) {
+  const fab = $('#assistantFab');
+  if (!fab || assistantPrefs.docked) return;
+  const { w, h } = assistantViewport();
+  const rect = fab.getBoundingClientRect();
+  const fw = rect.width || 64, fh = rect.height || 64;
+  const pos = { x: assistantClamp(x, 8, w - fw - 8), y: assistantClamp(y, 8, h - fh - 8) };
+  fab.style.left = pos.x + 'px';
+  fab.style.top = pos.y + 'px';
+  fab.style.right = 'auto';
+  fab.style.bottom = 'auto';
+  if (save) {
+    assistantPrefs.fabPos = pos;
+    saveAssistantPrefs();
+  }
+}
+
+function assistantApplyFabPosition() {
+  const fab = $('#assistantFab');
+  if (!fab || assistantPrefs.docked) return;
+  if (assistantPrefs.fabPos) assistantSetFabPosition(assistantPrefs.fabPos.x, assistantPrefs.fabPos.y, false);
+}
+
+function assistantResetFabPosition() {
+  const fab = $('#assistantFab');
+  if (!fab) return;
+  fab.style.left = '';
+  fab.style.top = '';
+  fab.style.right = '';
+  fab.style.bottom = '';
+}
+
+function assistantApplyPanelPosition() {
+  const panel = $('#assistantPanel');
+  if (!panel) return;
+  if (!assistantRuntime.open) return;
+  if (!assistantPrefs.panelPos) return;
+  const { w, h } = assistantViewport();
+  const rect = panel.getBoundingClientRect();
+  const pw = rect.width || 380, ph = rect.height || 400;
+  const pos = {
+    x: assistantClamp(assistantPrefs.panelPos.x, 8, Math.max(8, w - pw - 8)),
+    y: assistantClamp(assistantPrefs.panelPos.y, 8, Math.max(8, h - ph - 8))
+  };
+  panel.style.left = pos.x + 'px';
+  panel.style.top = pos.y + 'px';
+  panel.style.right = 'auto';
+  panel.style.bottom = 'auto';
+  if (pos.x !== assistantPrefs.panelPos.x || pos.y !== assistantPrefs.panelPos.y) {
+    assistantPrefs.panelPos = pos;
+    saveAssistantPrefs();
+  }
+}
+
+function assistantSetDocked(on, opts = {}) {
+  const fab = $('#assistantFab');
+  const root = $('#assistantRoot');
+  if (!fab || !root) return;
+  assistantPrefs.docked = !!on;
+  saveAssistantPrefs();
+  const hint = $('#assistantHint');
+  if (on) {
+    closeAssistant();
+    hint?.classList.remove('show');
+    const { w, h } = assistantViewport();
+    const side = assistantPrefs.dockSide === 'left' ? 'left' : 'right';
+    const top = assistantPrefs.fabPos ? assistantPrefs.fabPos.y : h - 150;
+    root.classList.add('docked');
+    fab.classList.add('docked');
+    fab.classList.toggle('dock-left', side === 'left');
+    fab.style.top = assistantClamp(top, 60, h - 90) + 'px';
+    fab.style.left = (side === 'right' ? w - 30 : -12) + 'px';
+    fab.style.right = 'auto';
+    fab.style.bottom = 'auto';
+    if (!opts.silent) toast('小光已半隐藏，点屏幕边上的小头像就能叫回来。', '◧');
+  } else {
+    root.classList.remove('docked');
+    fab.classList.remove('docked');
+    fab.classList.remove('dock-left');
+    fab.style.left = '';
+    fab.style.top = '';
+    fab.style.right = '';
+    fab.style.bottom = '';
+    assistantApplyFabPosition();
+  }
+}
+
+function assistantMakeDraggable(el, handle, kind) {
+  if (!el || !handle) return;
+  let startX = 0, startY = 0, startLeft = 0, startTop = 0, moved = false, active = false, pointerId = null;
+
+  const onDown = e => {
+    if (e.button !== undefined && e.button !== 0) return;
+    if (kind !== 'fab' && e.target.closest('button, a, input, select, textarea')) return;
+    if (kind === 'fab' && assistantPrefs.docked) {
+      // 从贴边状态拖出时，先恢复成完整小光，再开始拖。
+      assistantSetDocked(false, { silent: true });
+    }
+    const r = el.getBoundingClientRect();
+    startX = e.clientX; startY = e.clientY;
+    startLeft = r.left; startTop = r.top;
+    moved = false; active = true; pointerId = e.pointerId;
+    if (kind === 'panel') {
+      el.style.width = r.width + 'px';
+      el.style.left = r.left + 'px';
+      el.style.top = r.top + 'px';
+      el.style.right = 'auto';
+      el.style.bottom = 'auto';
+    }
+    el.classList.add('dragging');
+    document.body.classList.add('assistant-dragging');
+    try { el.setPointerCapture(e.pointerId); } catch (err) { /* noop */ }
+  };
+
+  const onMove = e => {
+    if (!active || (pointerId !== null && e.pointerId !== pointerId)) return;
+    const dx = e.clientX - startX, dy = e.clientY - startY;
+    if (Math.abs(dx) + Math.abs(dy) > 4) moved = true;
+    if (!moved) return;
+    e.preventDefault();
+    if (kind === 'fab') {
+      assistantSetFabPosition(startLeft + dx, startTop + dy, false);
+    } else {
+      const { w, h } = assistantViewport();
+      const r = el.getBoundingClientRect();
+      const x = assistantClamp(startLeft + dx, 8, Math.max(8, w - r.width - 8));
+      const y = assistantClamp(startTop + dy, 8, Math.max(8, h - r.height - 8));
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+    }
+  };
+
+  const onUp = e => {
+    if (!active) return;
+    if (e && e.pointerId !== undefined && pointerId !== null && e.pointerId !== pointerId) return;
+    active = false; pointerId = null;
+    window.removeEventListener('pointermove', onMove, true);
+    window.removeEventListener('pointerup', onUp, true);
+    window.removeEventListener('pointercancel', onUp, true);
+    el.classList.remove('dragging');
+    document.body.classList.remove('assistant-dragging');
+    if (!moved) return;
+    const r = el.getBoundingClientRect();
+    if (kind === 'fab') {
+      assistantRuntime.suppressClickUntil = Date.now() + 300;
+      assistantPrefs.fabPos = { x: r.left, y: r.top };
+      saveAssistantPrefs();
+      const { w } = assistantViewport();
+      if (r.left < 16) {
+        assistantPrefs.dockSide = 'left';
+        saveAssistantPrefs();
+        assistantSetDocked(true, { silent: true });
+      } else if (r.left + r.width > w - 16) {
+        assistantPrefs.dockSide = 'right';
+        saveAssistantPrefs();
+        assistantSetDocked(true, { silent: true });
+      }
+    } else {
+      assistantPrefs.panelPos = { x: r.left, y: r.top };
+      saveAssistantPrefs();
+    }
+  };
+
+  handle.addEventListener('pointerdown', e => {
+    onDown(e);
+    if (!active) return;
+    // 监听 window，手指/鼠标移出机器人或面板后仍能继续拖动。
+    window.addEventListener('pointermove', onMove, { passive: false, capture: true });
+    window.addEventListener('pointerup', onUp, true);
+    window.addEventListener('pointercancel', onUp, true);
+  });
+}
+
 function initAssistant() {
   const root = $('#assistantRoot');
   if (!root) return;
   root.innerHTML = `
     <div class="assistant-hint" id="assistantHint">遇到不会的，点我</div>
-    <button class="assistant-fab" id="assistantFab" type="button" aria-label="打开学习助手小光" aria-expanded="false">
+    <button class="assistant-fab" id="assistantFab" type="button" aria-label="打开学习助手小光，按住可以拖动" title="点我聊天；按住可以拖动" aria-expanded="false">
       <span class="assistant-fab-robot">${assistantRobotSVG()}</span>
       <i class="assistant-pulse" aria-hidden="true"></i>
     </button>
     <section class="assistant-panel" id="assistantPanel" aria-label="学习助手小光" aria-hidden="true">
       <header class="assistant-head">
         <span class="assistant-avatar">${assistantRobotSVG()}</span>
+        <span class="assistant-grip" aria-hidden="true" title="按住拖动面板">⠿</span>
         <div class="assistant-title"><b>小光</b><small>你的学习搭档${assistantAIReady() ? ' · AI 已配置' : ' · 本地知识库'}</small></div>
         <div class="assistant-head-actions">
           <button type="button" class="assistant-icon-btn" id="assistantVoice" aria-label="语音朗读开关" title="语音朗读">${assistantPrefs.voice ? '🔊' : '🔇'}</button>
           <button type="button" class="assistant-icon-btn" id="assistantSettings" aria-label="小光设置" title="设置">⚙</button>
+          <button type="button" class="assistant-icon-btn" id="assistantDock" aria-label="半隐藏小光" title="半隐藏到屏幕边缘">◧</button>
           <button type="button" class="assistant-icon-btn" id="assistantClose" aria-label="收起小光" title="收起">✕</button>
         </div>
       </header>
@@ -8535,7 +8753,29 @@ function initAssistant() {
       </div>
     </section>`;
 
-  $('#assistantFab').addEventListener('click', () => assistantRuntime.open ? closeAssistant() : openAssistant());
+  $('#assistantFab').addEventListener('click', () => {
+    if (Date.now() < assistantRuntime.suppressClickUntil) return;
+    if (assistantPrefs.docked) {
+      assistantSetDocked(false, { silent: true });
+      openAssistant();
+      return;
+    }
+    assistantRuntime.open ? closeAssistant() : openAssistant();
+  });
+  $('#assistantDock').addEventListener('click', () => {
+    const fab = $('#assistantFab');
+    const { w } = assistantViewport();
+    assistantPrefs.dockSide = fab && fab.getBoundingClientRect().left + fab.getBoundingClientRect().width / 2 > w / 2 ? 'right' : 'left';
+    saveAssistantPrefs();
+    if (assistantPrefs.docked) {
+      assistantSetDocked(false, { silent: true });
+      openAssistant();
+    } else {
+      assistantSetDocked(true);
+    }
+  });
+  assistantMakeDraggable($('#assistantFab'), $('#assistantFab'), 'fab');
+  assistantMakeDraggable($('#assistantPanel'), $('.assistant-head'), 'panel');
   $('#assistantClose').addEventListener('click', closeAssistant);
   $('#assistantVoice').addEventListener('click', () => {
     assistantPrefs.voice = !assistantPrefs.voice;
@@ -8567,6 +8807,13 @@ function initAssistant() {
     if (assistantRuntime.studySec >= assistantRuntime.nextBreak) assistantBreak(false);
   }, 30000);
   updateAssistantTimer();
+  if (assistantPrefs.docked) assistantSetDocked(true, { silent: true });
+  else assistantApplyFabPosition();
+  window.addEventListener('resize', () => {
+    if (assistantPrefs.docked) assistantSetDocked(true, { silent: true });
+    else assistantApplyFabPosition();
+    assistantApplyPanelPosition();
+  });
   const hint = $('#assistantHint');
   if (hint) {
     hint.textContent = ASSISTANT_GREETINGS[new Date().getDate() % ASSISTANT_GREETINGS.length];
@@ -8581,16 +8828,18 @@ function initAssistant() {
 }
 
 function openAssistant() {
+  if (assistantPrefs.docked) assistantSetDocked(false, { silent: true });
   assistantRuntime.open = true;
   $('#assistantPanel').classList.add('open');
   $('#assistantPanel').setAttribute('aria-hidden', 'false');
   $('#assistantFab').setAttribute('aria-expanded', 'true');
   $('#assistantHint')?.classList.remove('show');
   setTimeout(() => $('#assistantInput')?.focus(), 120);
+  requestAnimationFrame(assistantApplyPanelPosition);
   if (!assistantRuntime.greeted) {
     assistantRuntime.greeted = true;
     const line = ASSISTANT_GREETINGS[new Date().getDate() % ASSISTANT_GREETINGS.length];
-    assistantSay(`嗨，我是小光，你的学习搭档。${line}<br><span class="assistant-soft">不会的题、读不懂的题、想搜的知识点，都可以问我。也可以让我读给你听。</span>`, { speak: true, quick: true });
+    assistantSay(`嗨，我是小光，你的学习搭档。${line}<br><span class="assistant-soft">不会的题、读不懂的题、想搜的知识点，都可以问我。也可以让我读给你听。按住我可以拖到任意位置。</span>`, { speak: true, quick: true });
   }
 }
 function closeAssistant() {
@@ -8656,6 +8905,9 @@ async function askAssistant(text) {
   ]);
   const typing = assistantTyping();
   const query = String(text).trim();
+  const localHits = assistantSearch(query);
+  const strongLocal = localHits.length && localHits[0].score >= 18;
+  const wantsAI = /拓展|评价|比较|为什么|怎么理解|谈谈|关系|影响|背景|意义/.test(query);
 
   if (/^(搜索|查找|搜一下)/.test(query)) {
     const kw = query.replace(/^(搜索|查找|搜一下)/, '').trim();
@@ -8667,9 +8919,9 @@ async function askAssistant(text) {
 
   let reply = null;
   let aiFailed = false;
-  if (assistantAIReady() && !/^(今天学什么|休息一下)$/.test(query)) {
+  if (assistantAIReady() && (!strongLocal || wantsAI)) {
     try {
-      reply = await askAssistantAI(query);
+      reply = await askAssistantAI(query, localHits);
       if (!reply) aiFailed = true;
     } catch (e) {
       reply = null;
@@ -8731,16 +8983,28 @@ function localAssistantAnswer(query) {
     return `我在课本里暂时没找到“${esc(query)}”。可以换个关键词，或点「全网页搜索」；如果你在设置里配置了 AI，也可以直接问我更开放的问题。`;
   }
   const h = hits[0];
+  const related = hits.slice(1, 3).filter(x => x.type === 'lesson' || x.type === 'term' || x.type === 'figure' || x.type === 'event' || x.type === 'guide').map(x => {
+    const title = x.type === 'lesson' ? x.lesson.title : x.type === 'term' ? x.term[0] : x.type === 'figure' ? x.figure[0] : x.type === 'event' ? x.event[0] : x.title;
+    const href = x.type === 'lesson' ? `#unit/${x.lesson.unit}/knowledge` : x.type === 'term' ? `#unit/${x.lesson.unit}/knowledge` : x.type === 'figure' ? `#unit/${x.lesson.unit}/knowledge` : x.type === 'event' ? `#unit/${x.lesson.unit}/knowledge` : x.href;
+    return `<a class="assistant-link" href="${href}">${esc(title)}</a>`;
+  });
+  const relatedHTML = related.length ? `<br><span class="assistant-soft">还相关：</span>${related.join(' · ')}` : '';
   if (h.type === 'lesson') {
-    return `<b>《${esc(h.lesson.title)}》</b><br>${esc(h.lesson.core)}<br><span class="assistant-soft">${esc((h.lesson.points || [])[0] || '')}</span><br><a class="assistant-link" href="#unit/${h.lesson.unit}/knowledge">去这一课 →</a>`;
+    return `<b>《${esc(h.lesson.title)}》</b><br>${esc(h.lesson.core)}<br><span class="assistant-soft">${esc((h.lesson.points || [])[0] || '')}</span><br><a class="assistant-link" href="#unit/${h.lesson.unit}/knowledge">去这一课 →</a>${relatedHTML}`;
   }
   if (h.type === 'term') {
-    return `<b>${esc(h.term[0])}</b>：${esc(h.term[1])}<br><a class="assistant-link" href="#unit/${h.lesson.unit}/knowledge">在《${esc(h.lesson.title)}》里看上下文 →</a>`;
+    return `<b>${esc(h.term[0])}</b>：${esc(h.term[1])}<br><a class="assistant-link" href="#unit/${h.lesson.unit}/knowledge">在《${esc(h.lesson.title)}》里看上下文 →</a>${relatedHTML}`;
+  }
+  if (h.type === 'figure') {
+    return `<b>${esc(h.figure[0])}</b>：${esc(h.figure[1])}<br><a class="assistant-link" href="#unit/${h.lesson.unit}/knowledge">在《${esc(h.lesson.title)}》里看人物与时代 →</a>${relatedHTML}`;
+  }
+  if (h.type === 'event') {
+    return `<b>${esc(h.event[0])}</b>：${esc(h.event[1])}<br><a class="assistant-link" href="#unit/${h.lesson.unit}/knowledge">在《${esc(h.lesson.title)}》里看前因后果 →</a>${relatedHTML}`;
   }
   if (h.type === 'question') {
-    return `这道题考的是「${esc(h.q.point)}」，出自《${esc(h.lesson.title)}》。<br>你先看题干里的限定词，再想这一课的核心结论。需要我陪你拆题，点「帮我审题」。<br><a class="assistant-link" href="#unit/${h.q.unit}/quiz">去做这一单元的题 →</a>`;
+    return `这道题考的是「${esc(h.q.point)}」，出自《${esc(h.lesson.title)}》。<br>你先看题干里的限定词，再想这一课的核心结论。需要我陪你拆题，点「帮我审题」。<br><a class="assistant-link" href="#unit/${h.q.unit}/quiz">去做这一单元的题 →</a>${relatedHTML}`;
   }
-  return `我找到：<b>${esc(h.title)}</b><br>${esc(h.text || '')}`;
+  return `我找到：<b>${esc(h.title)}</b><br>${esc(h.text || '')}${relatedHTML}`;
 }
 
 function assistantSearch(query) {
@@ -8766,6 +9030,14 @@ function assistantSearch(query) {
       const ts = (t[0] === clean ? 22 : 0) + (t[0].includes(clean) ? 7 : 0) + scoreText(t[1], 0.6);
       if (ts > 0) out.push({ type: 'term', score: ts, lesson: l, term: t, title: t[0], text: t[1] });
     });
+    (l.figures || []).forEach(f => {
+      const fs = (f[0] === clean ? 30 : f[0].startsWith(clean) ? 20 : f[0].includes(clean) ? 12 : 0) + scoreText(f[1], 0.5);
+      if (fs > 0) out.push({ type: 'figure', score: fs, lesson: l, figure: f, title: f[0], text: f[1] });
+    });
+    (l.events || []).forEach(e => {
+      const es = (e[0] === clean ? 24 : e[0].includes(clean) ? 10 : 0) + scoreText(e[1], 0.5);
+      if (es > 0) out.push({ type: 'event', score: es, lesson: l, event: e, title: e[0], text: e[1] });
+    });
   });
   subjectQuestions(currentSid).forEach(q => {
     let score = scoreText(q.stem, 1.2) + scoreText(q.point, 2) + scoreText(q.explain, .4);
@@ -8778,13 +9050,14 @@ function assistantSearch(query) {
   return out.sort((a, b) => b.score - a.score).slice(0, 4);
 }
 
-async function askAssistantAI(query) {
+async function askAssistantAI(query, localHits = []) {
   const ai = assistantPrefs.ai || {};
   const endpoint = String(ai.endpoint || '').trim();
   if (!endpoint || !ai.key) return null;
   const url = /\/chat\/completions\/?$/.test(endpoint) ? endpoint : endpoint.replace(/\/$/, '') + '/chat/completions';
   const q = assistantCurrentQuestion();
   const context = q ? `当前题目：${q.stem}\n知识点：${q.point}\n题型：${q.type}` : `当前学科：${subjectById(currentSubject()).name}`;
+  const evidence = (localHits || []).slice(0, 3).map(h => `${h.type === 'lesson' ? '课时' : h.type === 'term' ? '名词' : '题目'}《${h.lesson?.title || h.title}》：${h.text || h.lesson?.core || ''}`).join('\n');
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 20000);
   try {
@@ -8793,10 +9066,10 @@ async function askAssistantAI(query) {
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ai.key}` },
       body: JSON.stringify({
         model: ai.model || 'deepseek-chat',
-        temperature: 0.5,
+        temperature: 0.4,
         max_tokens: 500,
         messages: [
-          { role: 'system', content: `你是初中学习助手“小光”，面向 11—15 岁学生。用中文回答，先给方法或提示，不要直接替学生写作业；如果学生问答案，先引导审题，再简要说明理由。回答不超过 220 字，必要时分 2—3 点。${context}` },
+          { role: 'system', content: `你是初中学习助手“小光”，面向 11—15 岁学生。用中文回答，先给方法或提示，不要直接替学生写作业；如果学生问答案，先引导审题，再简要说明理由。回答不超过 220 字，必要时分 2—3 点。优先依据下面的本地教材片段，不要编造与片段冲突的朝代、人物或事件。${context}${evidence ? `\n本地教材片段：\n${evidence}` : ''}` },
           { role: 'user', content: query }
         ]
       }),
@@ -8877,6 +9150,7 @@ function openAssistantSettings() {
     title: '小光设置',
     body: `<div class="assistant-settings-form">
       <label class="assistant-setting-row"><input type="checkbox" id="assistantVoiceSet" ${assistantPrefs.voice ? 'checked' : ''}> <span><b>语音朗读</b><small>读题、读解析、休息提醒</small></span></label>
+      <p class="small muted" style="margin:0;line-height:1.7">按住小光或面板顶部标题栏可以拖动；拖到左右边缘会自动半隐藏，点 ◧ 也可以贴边。</p>
       <label class="assistant-setting-row"><span><b>学习提醒</b><small>连续使用电脑多久提醒休息</small></span>
         <select id="assistantBreakSet">${[20, 30, 40, 45, 60].map(m => `<option value="${m}" ${assistantPrefs.breakMin === m ? 'selected' : ''}>${m} 分钟</option>`).join('')}</select>
       </label>
@@ -8887,6 +9161,7 @@ function openAssistantSettings() {
       <label class="assistant-setting-field">API Key<input id="assistantKey" type="password" value="${esc(ai.key || '')}" placeholder="只保存在本机" autocomplete="off"></label>
       <p class="small muted" style="margin:8px 0 0;line-height:1.7">Key 只保存在本机浏览器，不会随学习记录同步。浏览器直连接口可能被 CORS 拦截；如失败，请填写你自己的代理地址。</p>
       <button type="button" class="btn btn-sm btn-ghost" id="assistantTestVoice" style="margin-top:10px">试听语音</button>
+      <button type="button" class="btn btn-sm btn-ghost" id="assistantResetPos" style="margin-top:10px">重置小光位置</button>
     </div>`,
     actions: [
       { text: '取消' },
@@ -8909,10 +9184,22 @@ function openAssistantSettings() {
     ]
   });
   $('#assistantTestVoice')?.addEventListener('click', () => speakText('你好，我是小光。今天也不用学很多，弄懂一个为什么就很棒。'));
+  $('#assistantResetPos')?.addEventListener('click', () => {
+    assistantPrefs.fabPos = null;
+    assistantPrefs.panelPos = null;
+    assistantPrefs.docked = false;
+    saveAssistantPrefs();
+    assistantSetDocked(false, { silent: true });
+    assistantResetFabPosition();
+    const panel = $('#assistantPanel');
+    if (panel) { panel.style.left = ''; panel.style.top = ''; panel.style.right = ''; panel.style.bottom = ''; panel.style.width = ''; }
+    toast('小光回到右下角了。', '🤖');
+  });
 }
 
 window.speakText = speakText;
 window.speakQuestion = speakQuestion;
+
 
 
 
